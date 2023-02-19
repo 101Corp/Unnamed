@@ -8,6 +8,8 @@
 ]=]
 
 getgenv().Walls = false
+getgenv().Tracers = false
+getgenv().Names = false
 
 -- Instances: 5 | Scripts: 1 | Modules: 2
 local G2L = {};
@@ -217,7 +219,7 @@ local script = G2L["5"];
 				boxes[_]:SetAttribute("Thickness",1)
 				boxes[_]:SetAttribute("Filled",false)
 				boxes[_].UIStroke.Color = Color3.new(1,1,1);
-				boxes[_].Visible = true;
+				boxes[_].Visible = false;
 				boxes[_].ZIndex = 2
 				texts[_] = Drawing.new("Text")
 				texts[_].Text = i.Name
@@ -236,9 +238,9 @@ local script = G2L["5"];
 				local width, height = math.round(4/1.5 * scaleFactor), math.round(5/1.5 * scaleFactor)
 				local x, y = math.round(position.X), math.round(position.Y)
 				
-				boxes[_].Visible = visible
-				texts[_].Visible = visible
-				lines[_].Visible = visible
+				boxes[_].Visible = visible and getgenv().Walls
+				texts[_].Visible = visible and getgenv().Names
+				lines[_].Visible = visible and getgenv().Tracers
 	
 				boxes[_].Size = UDim2.newfromVector2(Vector2.new(width, height))
 				boxes[_].Position = UDim2.newfromVector2(Vector2.new(x - width / 2, y - height / 2))
@@ -252,10 +254,10 @@ local script = G2L["5"];
 				
 				lines[_]:SetAttribute("From",Vector2.new(script.Parent.AbsoluteSize.X/2,script.Parent.AbsoluteSize.Y+50))
 				lines[_]:SetAttribute("To",Vector2.new(x,y))
-			--else
-			--	boxes[_].Visible = false
-			--	texts[_].Visible = false
-			--	lines[_].Visible = false
+			else
+				boxes[_].Visible = false
+				texts[_].Visible = false
+				lines[_].Visible = false
 			end
 		end
 	end
@@ -279,10 +281,8 @@ local script = G2L["5"];
 	end
 	
 	game["Run Service"].RenderStepped:Connect(function()
-      if getgenv().Walls then
 		    makeDrawings()
 		    updateDrawings()
-      end
 	end)
 	
 	game["Run Service"].Stepped:Connect(function()

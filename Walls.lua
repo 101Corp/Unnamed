@@ -7,6 +7,7 @@
  Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER
 ]=]
 
+getgenv().WallsOn = false
 getgenv().Walls = false
 getgenv().Tracers = false
 getgenv().Names = false
@@ -281,8 +282,10 @@ local script = G2L["5"];
 	end
 	
 	game["Run Service"].RenderStepped:Connect(function()
+		if getgenv().WallsOn then
 		    makeDrawings()
 		    updateDrawings()
+		end
 	end)
 	
 	game["Run Service"].Stepped:Connect(function()

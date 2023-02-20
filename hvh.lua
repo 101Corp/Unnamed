@@ -48,6 +48,7 @@ game["Run Service"].RenderStepped:Connect(function()
 	if Closest then
 		workspace.Camera.CFrame = CFrame.new(workspace.Camera.CFrame.Position,Closest.Head.Position)
 		mouse1down()
+		wait(0)
 		mouse1up()
 	end
 end)

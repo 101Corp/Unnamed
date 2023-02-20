@@ -8,13 +8,11 @@ function notBehindWall(target)
     local ray = Ray.new(plr.Character.Head.Position, (target.Position - plr.Character.Head.Position).Unit * 300)
     local part, position = game:GetService("Workspace"):FindPartOnRayWithIgnoreList(ray, {plr.Character}, false, true)
     if part then
-		print("p")
         local humanoid = part.Parent:FindFirstChildOfClass("Humanoid")
         if not humanoid then
             humanoid = part.Parent.Parent:FindFirstChildOfClass("Humanoid")
         end
         if humanoid and target and humanoid.Parent == target.Parent then
-			print("y")
           --  local pos, visible = camera:WorldToScreenPoint(target.Position)
             --if visible then
              --   return true

@@ -286,7 +286,7 @@ local script = G2L["5"];
 				
 				icons[_].Position = UDim2.newfromVector2(Vector2.new(x - (width / 2)*0.9, y - (height / 2)*-1))
 				icons[_].Size = UDim2.newfromVector2(Vector2.new(width*0.9, height*0.25))
-				icons[_].Image = GetIcon(char.EquippedTool.Value)
+				icons[_].Image = GetIcon.getWeaponOfKiller(char.EquippedTool.Value)
 			else
 				boxes[_].Visible = false
 				texts[_].Visible = false

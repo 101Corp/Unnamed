@@ -256,12 +256,12 @@ local script = G2L["5"];
 				local width, height = math.round(4/1.5 * scaleFactor), math.round(5/1.5 * scaleFactor)
 				local x, y = math.round(position.X), math.round(position.Y)
 				
-				boxes[_].Visible = visible and getgenv().Walls
-				texts[_].Visible = visible and getgenv().Names
-				lines[_].Visible = visible and getgenv().Tracers
-				barrs[_].Visible = visible and getgenv().HPBars
-				obars[_].Visible = visible and getgenv().HPBars
-				icons[_].Visible = visible and getgenv().Icons
+				boxes[_].Visible = visible and getgenv().Walls and getgenv().WallsOn
+				texts[_].Visible = visible and getgenv().Names and getgenv().WallsOn
+				lines[_].Visible = visible and getgenv().Tracers and getgenv().WallsOn
+				barrs[_].Visible = visible and getgenv().HPBars and getgenv().WallsOn
+				obars[_].Visible = visible and getgenv().HPBars and getgenv().WallsOn
+				icons[_].Visible = visible and getgenv().Icons and getgenv().WallsOn
 				
 				boxes[_].Size = UDim2.newfromVector2(Vector2.new(width, height))
 				boxes[_].Position = UDim2.newfromVector2(Vector2.new(x - width / 2, y - height / 2))

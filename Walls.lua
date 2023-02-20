@@ -11,6 +11,8 @@ getgenv().WallsOn = false
 getgenv().Walls = false
 getgenv().Tracers = false
 getgenv().Names = false
+getgenv().HPBars = false
+getgenv().Icons = false
 
 -- Instances: 5 | Scripts: 1 | Modules: 2
 local G2L = {};
@@ -76,7 +78,8 @@ local gui
 function Drawing.Start()
     game["Run Service"].RenderStepped:Connect(function()
         if gui then
-            for _, i in pairs(gui:GetChildren()) do
+			for _, i in pairs(gui:GetChildren()) do
+				i.BorderSizePixel = 0
                 for o,val in pairs(i:GetAttributes()) do
                     if o == "Filled" then
                         if val == true then
@@ -86,7 +89,7 @@ function Drawing.Start()
                             i.BackgroundTransparency = 1
                         end
                     end
-                    if o == "Thickness" then
+					if o == "Thickness" then
                         i.UIStroke.Thickness = val
                     end
 					if o == "Radius" and not i:GetAttributes()["NotCircle"] then
@@ -94,13 +97,13 @@ function Drawing.Start()
 						i.UICorner.CornerRadius = UDim.new(0,val)
 					end
 					if i:GetAttributes()["Line"] then
-						print("Line!!!")
+						--print("Line!!!")
 						local apos = i:GetAttributes()["From"]
 						local bpos = i:GetAttributes()["To"]
-						print(i:GetAttributes()["From"],i:GetAttributes()["To"])
+						--print(i:GetAttributes()["From"],i:GetAttributes()["To"])
 						local centerPosV2 = apos:Lerp(bpos, 0.5)
 						local centerPos = UDim2.new(0, centerPosV2.X,0, centerPosV2.Y)
-						local lineHeight = 1
+						local lineHeight = i:GetAttributes()["LineThickness"]
 						local lineSize = UDim2.new(0, ((apos - bpos).Magnitude),0, lineHeight)
 						local vertDist = apos.Y - bpos.Y
 						local horizDist = apos.X - bpos.X
@@ -108,7 +111,7 @@ function Drawing.Start()
 						i.Position = centerPos
 						i.Size = lineSize
 						i.Rotation = rot
-						i.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						i.BackgroundColor3 = i:GetAttributes()["Color"]
 						i.BorderSizePixel = 0
 						i.AnchorPoint = Vector2.new(0.5, 0.5)
 					end
@@ -151,6 +154,8 @@ function Drawing.new(typ)
 		frame:SetAttribute("Line",true)
 		frame:SetAttribute("From",Vector2.new(0,0))
 		frame:SetAttribute("To",Vector2.new(0,0))
+		frame:SetAttribute("LineThickness",1)
+		frame:SetAttribute("Color",Color3.fromRGB(255, 255, 255))
 		return frame
 	end
 	if typ == "Square" then
@@ -200,12 +205,16 @@ local function C_5()
 local script = G2L["5"];
 	local Drawing = require(script.Parent.Modules.Drawing)
 	local UDim2 = require(script.Parent.Modules.ToUDim2)
+	local GetIcon = require(game.ReplicatedStorage.GetIcon)
 	
 	Drawing.Start()
 	
 	local boxes = {}
 	local texts = {}
 	local lines = {}
+	local barrs = {}
+	local obars = {}
+	local icons = {}
 	
 	local wtvp = function(...) 
 		local a, b = workspace.Camera.WorldToViewportPoint(workspace.Camera, ...) 
@@ -215,16 +224,24 @@ local script = G2L["5"];
 	function makeDrawings()
 		local x = 0
 		for _,i in pairs(game.Players:GetChildren()) do
-			if i ~= game.Players.LocalPlayer then
+			if i == game.Players.LocalPlayer then
 				boxes[_] = Drawing.new("Square")
 				boxes[_]:SetAttribute("Thickness",1)
 				boxes[_]:SetAttribute("Filled",false)
-				boxes[_].UIStroke.Color = Color3.new(1,1,1);
-				boxes[_].Visible = false;
+				boxes[_].UIStroke.Color = Color3.new(1,1,1)
+				boxes[_].Visible = true;
 				boxes[_].ZIndex = 2
 				texts[_] = Drawing.new("Text")
 				texts[_].Text = i.Name
 				lines[_] = Drawing.new("Line")
+				barrs[_] = Drawing.new("Square")
+				barrs[_]:SetAttribute("Filled",true)
+				barrs[_]:SetAttribute("Thickness",0)
+				obars[_] = Drawing.new("Square")
+				obars[_]:SetAttribute("Filled",true)
+				obars[_]:SetAttribute("Thickness",0)
+				icons[_] = Instance.new("ImageLabel",game.Players.LocalPlayer.PlayerGui:WaitForChild("GUI_DrawingLIB"))
+				icons[_].BackgroundTransparency = 1
 			end
 		end
 	end
@@ -242,7 +259,10 @@ local script = G2L["5"];
 				boxes[_].Visible = visible and getgenv().Walls
 				texts[_].Visible = visible and getgenv().Names
 				lines[_].Visible = visible and getgenv().Tracers
-	
+				barrs[_].Visible = visible and getgenv().HPBars
+				obars[_].Visible = visible and getgenv().HPBars
+				icons[_].Visible = visible and getgenv().Icons
+				
 				boxes[_].Size = UDim2.newfromVector2(Vector2.new(width, height))
 				boxes[_].Position = UDim2.newfromVector2(Vector2.new(x - width / 2, y - height / 2))
 	
@@ -255,10 +275,25 @@ local script = G2L["5"];
 				
 				lines[_]:SetAttribute("From",Vector2.new(script.Parent.AbsoluteSize.X/2,script.Parent.AbsoluteSize.Y+50))
 				lines[_]:SetAttribute("To",Vector2.new(x,y))
+				
+				barrs[_].Size = UDim2.newfromVector2(Vector2.new(1, height))
+				barrs[_].Position = UDim2.newfromVector2(Vector2.new(x - ((width+8) / 2), y - height / 2))
+				barrs[_].BackgroundColor3 = Color3.new(0, 0, 0)
+				
+				obars[_].Size = UDim2.newfromVector2(Vector2.new(1, height*char.Humanoid.Health/100))
+				obars[_].Position = UDim2.newfromVector2(Vector2.new(x - ((width+8) / 2), (y - height / 2)))
+				obars[_].BackgroundColor3 = Color3.new(0, 1, 0)
+				
+				icons[_].Position = UDim2.newfromVector2(Vector2.new(x - (width / 2)*0.9, y - (height / 2)*-1))
+				icons[_].Size = UDim2.newfromVector2(Vector2.new(width*0.9, height*0.25))
+				icons[_].Image = GetIcon(char.EquippedTool.Value)
 			else
 				boxes[_].Visible = false
 				texts[_].Visible = false
 				lines[_].Visible = false
+				barrs[_].Visible = false
+				obars[_].Visible = false
+				icons[_].Visible = false
 			end
 		end
 	end
@@ -279,13 +314,26 @@ local script = G2L["5"];
 			i:Destroy()
 	
 		end
+		for _,i in pairs(barrs) do
+	
+			i:Destroy()
+	
+		end
+		for _,i in pairs(obars) do
+	
+			i:Destroy()
+	
+		end
+		for _,i in pairs(icons) do
+	
+			i:Destroy()
+	
+		end
 	end
 	
 	game["Run Service"].RenderStepped:Connect(function()
-		if getgenv().WallsOn then
-		    makeDrawings()
-		    updateDrawings()
-		end
+		makeDrawings()
+		updateDrawings()
 	end)
 	
 	game["Run Service"].Stepped:Connect(function()

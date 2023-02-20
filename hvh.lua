@@ -3,6 +3,8 @@ local PlayerMode = false
 local plr = game.Players.LocalPlayer
 local camera = game:GetService("Workspace").CurrentCamera
 
+local Client = getsenv(game.Players.LocalPlayer.PlayerGui:WaitForChild("Client"))
+
 
 function notBehindWall(target)
 	local ray = Ray.new(plr.Character.Head.Position, (target.Position - plr.Character.Head.Position).Unit * 300)
@@ -47,6 +49,6 @@ game["Run Service"].RenderStepped:Connect(function()
 	local Closest = findClosestNotObstructed()
 	if Closest then
 		workspace.Camera.CFrame = CFrame.new(workspace.Camera.CFrame.Position,Closest.Head.Position)
-                mouse1click()
+                Client.firebullet()
 	end
 end)

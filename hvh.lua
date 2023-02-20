@@ -55,6 +55,7 @@ game["Run Service"].RenderStepped:Connect(function()
                 	Client.firebullet()
 			Debounce = true
 			wait(game.ReplicatedStorage.Weapons:FindFirstChild(plr.Character.EquippedTool.Value).FireRate.Value)
+			Debounce = false
 		end
 	end
 end)

@@ -45,10 +45,16 @@ function findClosestNotObstructed()
 	return obj
 end
 
+local Debounce = false
+
 game["Run Service"].RenderStepped:Connect(function()
-	local Closest = findClosestNotObstructed()
-	if Closest then
-		workspace.Camera.CFrame = CFrame.new(workspace.Camera.CFrame.Position,Closest.Head.Position)
-                Client.firebullet()
+	if not Debounce and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+		local Closest = findClosestNotObstructed()
+		if Closest then
+			workspace.Camera.CFrame = CFrame.new(workspace.Camera.CFrame.Position,Closest.Head.Position)
+                	Client.firebullet()
+			Debounce = true
+			wait(game.ReplicatedStorage.Weapons:FindFirstChild(plr.Character.EquippedTool.Value).FireRate.Value)
+		end
 	end
 end)

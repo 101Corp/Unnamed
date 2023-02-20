@@ -1,3 +1,5 @@
+getgenv().HVHMode = false
+
 local PlayerMode = false
 
 local plr = game.Players.LocalPlayer
@@ -48,7 +50,7 @@ end
 local Debounce = false
 
 game["Run Service"].RenderStepped:Connect(function()
-	if not Debounce and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+	if getgenv().HVHMode and not Debounce and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
 		local Closest = findClosestNotObstructed()
 		if Closest then
 			workspace.Camera.CFrame = CFrame.new(workspace.Camera.CFrame.Position,Closest.Head.Position)

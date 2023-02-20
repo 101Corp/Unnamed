@@ -224,7 +224,7 @@ local script = G2L["5"];
 	function makeDrawings()
 		local x = 0
 		for _,i in pairs(game.Players:GetChildren()) do
-			if i == game.Players.LocalPlayer then
+			if i ~= game.Players.LocalPlayer then
 				boxes[_] = Drawing.new("Square")
 				boxes[_]:SetAttribute("Thickness",1)
 				boxes[_]:SetAttribute("Filled",false)

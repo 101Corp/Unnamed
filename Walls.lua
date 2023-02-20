@@ -240,7 +240,7 @@ local script = G2L["5"];
 				obars[_] = Drawing.new("Square")
 				obars[_]:SetAttribute("Filled",true)
 				obars[_]:SetAttribute("Thickness",0)
-				icons[_] = Instance.new("ImageLabel",game.Players.LocalPlayer.PlayerGui:WaitForChild("GUI_DrawingLIB"))
+				icons[_] = Instance.new("ImageLabel",game.Players.LocalPlayer.PlayerGui:WaitForChild("GUI"))
 				icons[_].BackgroundTransparency = 1
 			end
 		end
